@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- from the webpage -->
+    <color name="uranian_blue">#b1dcfd</color>
+    <color name="rich_black">#040508</color>
+    <color name="alice_blue">#eef1f7</color>
+    <color name="royal_blue_dark">#0c2d69</color>
+    <color name="pale_cerulean">#8cb4d4</color>
+    <color name="iceberg">#67a0cf</color>
+    <color name="denim">#255fb6</color>
+
+    <!-- black mode from the android color picker -->
+    <color name="dark_grey">#303236</color>
+    <color name="light_grey">#616062</color>
+    <color name="blue_plus_button">#005DB0</color>
+    <color name="blue_equal_button">#1991FE</color>
+    <color name="blue_times_button">#005DB0</color>
+    <color name="black_background">#17191A</color>
+    <color name="white_lettering">#FAFAFB</color>
+
+    <!-- white mode from the android color picker -->
+    <color name="white_background">#F5F7F9 </color>
+    <color name="white_nine_button">#FAFAFD  </color>
+    <color name="plus_button">#ACE0FE  </color>
+    <color name="equals_button">#18ACFB  </color>
+
+</resources>
