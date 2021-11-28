@@ -1,10 +1,10 @@
-package com.finalproject.QueerCalc;
+package com.finalproject.queerCalc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.finalproject.QueerCalc.ui.main.MainFragment;
+import com.finalproject.queerCalc.ui.main.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.finalproject.QueerCalc;
+package com.finalproject.queerCalc;
 
 import android.content.Context;
 
