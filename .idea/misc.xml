@@ -4,7 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/androidStudioProjects/QueerCalc/app/src/main/res/drawable/button_background.xml" value="0.15833333333333333" />
+        <entry key="..\:/androidStudioProjects/QueerCalc/app/src/main/res/layout/fragment_new_secret.xml" value="0.2" />
+        <entry key="..\:/androidStudioProjects/QueerCalc/app/src/main/res/layout/main_activity.xml" value="0.16354166666666667" />
         <entry key="..\:/androidStudioProjects/QueerCalc/app/src/main/res/layout/main_fragment.xml" value="0.1" />
+        <entry key="..\:/androidStudioProjects/QueerCalc/app/src/main/res/layout/secretcard.xml" value="0.209375" />
+        <entry key="..\:/androidStudioProjects/QueerCalc/app/src/main/res/layout/secrets_fragment.xml" value="0.2" />
       </map>
     </option>
   </component>

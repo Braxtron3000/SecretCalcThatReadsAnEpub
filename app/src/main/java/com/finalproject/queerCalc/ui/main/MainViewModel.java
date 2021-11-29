@@ -3,9 +3,11 @@ package com.finalproject.queerCalc.ui.main;
 import static android.content.ContentValues.TAG;
 
 import android.util.Log;
+import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.navigation.Navigation;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
@@ -16,9 +18,13 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<String> result = new MutableLiveData<>("");
 
     public void addtoEquation(char addedChar) {
-
+        //if the result isn't empty it's a new equation so the screen will automatically be wiped for a new equation.
+        if (!result.getValue().equals("")){
+            equation.setValue("");
+            result.setValue("");
+        }
         equation.setValue(equation.getValue().concat(String.valueOf(addedChar)));
-        Log.d(TAG, "addtoEquation: " + equation.getValue());
+
     }
 
     public void clearEquation() {
@@ -55,6 +61,10 @@ public class MainViewModel extends ViewModel {
             System.out.println(e);
             result.setValue("N/A");
         }
+    }
+
+    public void instigatenavigation(){
+
     }
 
 

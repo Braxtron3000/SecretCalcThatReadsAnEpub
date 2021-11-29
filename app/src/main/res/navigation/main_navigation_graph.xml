@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.finalproject.queerCalc.ui.main.MainFragment"
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_secrets"
+            app:destination="@id/secrets" />
+    </fragment>
+    <fragment
+        android:id="@+id/secrets"
+        android:name="com.finalproject.queerCalc.ui.main.Secrets"
+        android:label="secrets_fragment"
+        tools:layout="@layout/secrets_fragment" >
+        <action
+            android:id="@+id/action_secrets_to_newSecret"
+            app:destination="@id/newSecret" />
+    </fragment>
+    <fragment
+        android:id="@+id/newSecret"
+        android:name="com.finalproject.queerCalc.newSecret"
+        android:label="fragment_new_secret"
+        tools:layout="@layout/fragment_new_secret" />
+</navigation>
