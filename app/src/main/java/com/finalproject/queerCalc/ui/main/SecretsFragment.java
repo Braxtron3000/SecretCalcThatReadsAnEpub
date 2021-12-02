@@ -21,13 +21,13 @@ import com.finalproject.queerCalc.databinding.SecretsFragmentBinding;
 
 import static com.finalproject.queerCalc.BR.mySecretViewModel;
 
-public class Secrets extends Fragment {
+public class SecretsFragment extends Fragment {
 
     public SecretsFragmentBinding binding;
     private SecretsViewModel mViewModel;
 
-    public static Secrets newInstance() {
-        return new Secrets();
+    public static SecretsFragment newInstance() {
+        return new SecretsFragment();
     }
 
     @Override
@@ -43,10 +43,12 @@ public class Secrets extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(SecretsViewModel.class);
         binding.setVariable(mySecretViewModel,mViewModel);
-    }
-
-    public void createSecret(View view){
-        Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.action_secrets_to_newSecret);
+        getView().findViewById(R.id.floatingActionButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.action_secrets_to_newSecret);
+            }
+        });
     }
 
 }

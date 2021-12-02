@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/secrets"
-        android:name="com.finalproject.queerCalc.ui.main.Secrets"
+        android:name="com.finalproject.queerCalc.ui.main.SecretsFragment"
         android:label="secrets_fragment"
         tools:layout="@layout/secrets_fragment" >
         <action
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/newSecret"
-        android:name="com.finalproject.queerCalc.newSecret"
+        android:name="com.finalproject.queerCalc.ui.main.newSecret"
         android:label="fragment_new_secret"
         tools:layout="@layout/fragment_new_secret" />
 </navigation>
