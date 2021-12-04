@@ -16,4 +16,25 @@ public class Pin {
     @ColumnInfo(name = "pin_number")
     public int pinNumber;
 
+
+    public Pin(String title, int pinNumber) {
+        this.title = title;
+        this.pinNumber = pinNumber;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getPinNumber() {
+        return pinNumber;
+    }
+
+    public void setPinNumber(int pinNumber) {
+        this.pinNumber = pinNumber;
+    }
 }

@@ -7,3 +7,4 @@ import androidx.room.RoomDatabase;
 public abstract class PinRoomDatabase extends RoomDatabase {
     public abstract PinDao pinDao();
 }
+

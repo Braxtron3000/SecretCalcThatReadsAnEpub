@@ -1,11 +1,12 @@
 package com.finalproject.queerCalc.ui.main;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.room.Room;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,15 +16,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.finalproject.queerCalc.R;
-import com.finalproject.queerCalc.Secret;
-import com.finalproject.queerCalc.SecretRepository;
+import com.finalproject.queerCalc.database.Pin;
+import com.finalproject.queerCalc.database.PinDao;
+import com.finalproject.queerCalc.database.PinRoomDatabase;
+
+import io.reactivex.Completable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link newSecret#newInstance} factory method to
+ * Use the {@link newSecretFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class newSecret extends Fragment {
+public class newSecretFragment extends Fragment {
 
     private NewSecretViewModel mViewModel;
 
@@ -37,9 +42,9 @@ public class newSecret extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private SecretRepository repository;
+    //private SecretRepository repository;
 
-    public newSecret() {
+    public newSecretFragment() {
         // Required empty public constructor
     }
 
@@ -52,8 +57,8 @@ public class newSecret extends Fragment {
      * @return A new instance of fragment newSecret.
      */
     // TODO: Rename and change types and number of parameters
-    public static newSecret newInstance(String param1, String param2) {
-        newSecret fragment = new newSecret();
+    public static newSecretFragment newInstance(String param1, String param2) {
+        newSecretFragment fragment = new newSecretFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -83,7 +88,7 @@ public class newSecret extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(NewSecretViewModel.class);
+        //mViewModel = new ViewModelProvider(this).get(NewSecretViewModel.class);
         requireView().findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,8 +101,22 @@ public class newSecret extends Fragment {
                 else {
                     Log.d("insert secret"," secret title: "+title);
                     Log.d("insert secret"," secret pin: "+pin);
-                    Secret secret = new Secret(title,Integer.parseInt(pin));
-                    mViewModel.insertSecret(secret);
+                    Pin secret = new Pin(title,Integer.parseInt(pin));
+                    if (requireActivity().getApplicationContext()==null)Log.d("android is retard","duhhhh i'm null cuz im stupid like thta");
+                    PinRoomDatabase db = Room.databaseBuilder(requireActivity().getApplicationContext(), PinRoomDatabase.class, "pins_database").build();
+                    PinDao pinDao = db.pinDao();
+
+                    Completable.fromRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            pinDao.insertAll(secret);
+                        }
+                    })
+                            .subscribeOn(Schedulers.io())
+                            .subscribe();
+
+                    Toast.makeText(getContext(), "pin saved", Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.action_newSecret_to_secrets);
                 }
 
 

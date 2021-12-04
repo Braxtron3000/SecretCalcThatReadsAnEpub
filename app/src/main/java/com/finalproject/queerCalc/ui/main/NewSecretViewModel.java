@@ -7,14 +7,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.finalproject.queerCalc.Secret;
-import com.finalproject.queerCalc.SecretRepository;
-
 import java.util.List;
 
-public class NewSecretViewModel extends AndroidViewModel {
+public class NewSecretViewModel /*extends AndroidViewModel*/ {
 
-    private SecretRepository repository;
+    /*private SecretRepository repository;
     private LiveData<List<Secret>> allSecrets;
     private MutableLiveData<List<Secret>> searchResults;
 
@@ -45,5 +42,5 @@ public class NewSecretViewModel extends AndroidViewModel {
         repository.deleteSecret(name);
     }
 
-
+*/
 }

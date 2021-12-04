@@ -10,19 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.finalproject.queerCalc.R;
-import com.finalproject.queerCalc.Secret;
-import com.finalproject.queerCalc.SecretDao;
+import com.finalproject.queerCalc.database.Pin;
 
 import java.util.List;
 
 public class SecretsAdapter extends RecyclerView.Adapter<SecretsAdapter.ViewHolder> {
 
     private int secretItemLayout;
-    private List<Secret> secretList;
+    private List<Pin> secretList;
 
     public SecretsAdapter(int layoutId){secretItemLayout = layoutId;}
 
-    private void setSecretList(List<Secret> secrets){
+    private void setSecretList(List<Pin> secrets){
         secretList = secrets;
         notifyDataSetChanged();
     }
@@ -41,8 +40,8 @@ public class SecretsAdapter extends RecyclerView.Adapter<SecretsAdapter.ViewHold
         TextView secretPin = holder.tv_secretPin;
         ImageView imageView = holder.img_menu;
 
-        secretTitle.setText(secretList.get(position).getSecretTitle());
-        secretPin.setText(secretList.get(position).getSecretPin());
+        secretTitle.setText(secretList.get(position).getTitle());
+        secretPin.setText(secretList.get(position).getPinNumber());
 
         //set the imageview to inflate the menu onclick
 
