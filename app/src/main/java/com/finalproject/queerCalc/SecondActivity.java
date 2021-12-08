@@ -1,9 +1,12 @@
 package com.finalproject.queerCalc;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.security.crypto.EncryptedFile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,7 +29,6 @@ import java.util.List;
 
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.Resource;
-import nl.siegmann.epublib.domain.SpineReference;
 import nl.siegmann.epublib.domain.TOCReference;
 import nl.siegmann.epublib.epub.EpubReader;
 
@@ -45,29 +48,14 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-
-
-        /*findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    //secondTry();
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
-
         //initializaton stuff
         webView = findViewById(R.id.webview);
         webView.setWebViewClient(new MyWebViewClient());
         epubReader = new EpubReader();
-        baseUrl = getResources().openRawResource(R.raw.bible).toString();
+        baseUrl = getResources().openRawResource(R.raw.equations).toString();
         book = null;
         try {
-            book = epubReader.readEpub(getResources().openRawResource(R.raw.bible));
+            book = epubReader.readEpub(getResources().openRawResource(R.raw.equations));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,7 +91,15 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
-    //had to make this because android is retarded and doesn't listen to its xml.
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+
+    //TOOLBAR
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.epubnavigation, menu);
@@ -145,12 +141,13 @@ public class SecondActivity extends AppCompatActivity {
         }
     }
 
+
+    //READING FILES
     private String getResource(int i) {
         String linez = "";
-        List<SpineReference> spineReferenceList = book.getSpine().getSpineReferences();
+        //List<SpineReference> spineReferenceList = book.getSpine().getSpineReferences();
         StringBuilder sb = new StringBuilder();
         Resource resource = book.getSpine().getResource(i);
-
 
         try {
             InputStream is = resource.getInputStream();
@@ -207,7 +204,7 @@ public class SecondActivity extends AppCompatActivity {
         return linez;
     }
 
-    //shortened load webviewer
+    //WEBVIEW
     private void loadToWebView(String presenter) {
         webView.loadDataWithBaseURL(baseUrl, presenter, "text/html", "utf-8", null);
     }
@@ -222,6 +219,8 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
+
+    //LOGGING
     private void logTableOfContents(List<TOCReference> tocReferences, int depth) {
         if (tocReferences == null) {
             return;
@@ -237,6 +236,8 @@ public class SecondActivity extends AppCompatActivity {
             logTableOfContents(tocReference.getChildren(), depth + 1);
         }
     }
+
+
 
 
 }

@@ -1,5 +1,7 @@
 package com.finalproject.queerCalc.ui.main;
 
+import static android.app.Activity.RESULT_OK;
+
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -42,7 +44,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         //return inflater.inflate(R.layout.main_fragment, container, false);
-        binding = DataBindingUtil.inflate(inflater,R.layout.main_fragment,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
     }
@@ -61,17 +63,25 @@ public class MainFragment extends Fragment {
 
 
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        binding.setVariable(myViewModel,mViewModel);
+        binding.setVariable(myViewModel, mViewModel);
     }
 
-    public void instigateNavigation(View v){
-        String equation = ((TextView)getView().findViewById(R.id.tv_equation)).getText().toString();
+    public void instigateNavigation(View v) {
+        String equation = ((TextView) getView().findViewById(R.id.tv_equation)).getText().toString();
 
 
-        if (equation.equals("//5318008")) startActivity((new Intent(getContext(),SecondActivity.class)));
-            //Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.action_mainFragment_to_secrets);
+        if (equation.equals("//5318008"))
+            startActivityForResult((new Intent(getContext(), SecondActivity.class)), 1);
+        //Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.action_mainFragment_to_secrets);
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            mViewModel.equation.setValue("15*40+");
+        }
+    }
 
 }
