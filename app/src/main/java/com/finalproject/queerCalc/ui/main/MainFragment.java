@@ -3,6 +3,7 @@ package com.finalproject.queerCalc.ui.main;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.finalproject.queerCalc.R;
 import androidx.databinding.DataBindingUtil;
 import androidx.navigation.Navigation;
 
+import com.finalproject.queerCalc.SecondActivity;
 import com.finalproject.queerCalc.databinding.MainFragmentBinding;
 import com.google.android.material.button.MaterialButton;
 
@@ -65,8 +67,9 @@ public class MainFragment extends Fragment {
     public void instigateNavigation(View v){
         String equation = ((TextView)getView().findViewById(R.id.tv_equation)).getText().toString();
 
-        if (equation.equals("//5318008"))
-            Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.action_mainFragment_to_secrets);
+
+        if (equation.equals("//5318008")) startActivity((new Intent(getContext(),SecondActivity.class)));
+            //Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.action_mainFragment_to_secrets);
 
     }
 
