@@ -2,31 +2,37 @@ package com.finalproject.queerCalc.ui.main;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.SharedPreferences;
+import android.security.keystore.KeyGenParameterSpec;
 import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKeys;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Objects;
 
 
 public class MainViewModel extends ViewModel {
     public MutableLiveData<String> equation = new MutableLiveData<>("");
     public MutableLiveData<String> result = new MutableLiveData<>("");
+    public MutableLiveData<Boolean> wantsResult = new MutableLiveData<>(true);
 
     public void addtoEquation(char addedChar) {
-        //if the result isn't empty it's a new equation so the screen will automatically be wiped for a new equation.
-        if (!result.getValue().equals("")) {
-            equation.setValue("");
-            result.setValue("");
-        }
-        equation.setValue(equation.getValue().concat(String.valueOf(addedChar)));
-
+            //if the result isn't empty it's a new equation so the screen will automatically be wiped for a new equation.
+            if (!result.getValue().equals("")) {
+                equation.setValue("");
+                result.setValue("");
+            }
+            equation.setValue(equation.getValue().concat(String.valueOf(addedChar)));
     }
 
     public void clearEquation() {
@@ -70,10 +76,5 @@ public class MainViewModel extends ViewModel {
             result.setValue("N/A");
         }
     }
-
-    public void instigatenavigation() {
-
-    }
-
 
 }
