@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.security.crypto.EncryptedFile;
 
 import android.content.Intent;
+import androidx.biometric.*;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.Resource;
@@ -43,10 +45,18 @@ public class SecondActivity extends AppCompatActivity {
 
     HashMap<String, Resource> titlesToResources = new HashMap<>();
 
+    private Executor executor;
+    private BiometricPrompt biometricPrompt;
+    private androidx.biometric.BiometricPrompt.PromptInfo promptInfo;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
+
+
+
 
         //initializaton stuff
         webView = findViewById(R.id.webview);
@@ -64,8 +74,6 @@ public class SecondActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         webView.loadDataWithBaseURL(baseUrl, getResource(resourceNum), "text/html", "utf-8", null);
-
-
 
         ArrayList<String> chapters = getTableOfContents(book.getTableOfContents().getTocReferences(), 0);
 
@@ -87,8 +95,6 @@ public class SecondActivity extends AppCompatActivity {
 
             }
         }));
-
-
     }
 
     @Override
@@ -145,7 +151,6 @@ public class SecondActivity extends AppCompatActivity {
     //READING FILES
     private String getResource(int i) {
         String linez = "";
-        //List<SpineReference> spineReferenceList = book.getSpine().getSpineReferences();
         StringBuilder sb = new StringBuilder();
         Resource resource = book.getSpine().getResource(i);
 
@@ -166,6 +171,9 @@ public class SecondActivity extends AppCompatActivity {
         }
         return linez;
     }
+
+
+
 
     private ArrayList<String> getTableOfContents(List<TOCReference> tocReferences, int depth) {
         if (tocReferences == null) {

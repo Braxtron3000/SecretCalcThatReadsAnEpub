@@ -2,19 +2,26 @@ package com.finalproject.queerCalc.ui.main;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
+import static android.content.Context.KEYGUARD_SERVICE;
 
-import androidx.lifecycle.LifecycleObserver;
+import androidx.biometric.*;
+
+
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+
+import android.app.KeyguardManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.preference.PreferenceManager;
 import android.security.keystore.KeyGenParameterSpec;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,21 +33,17 @@ import android.widget.Toast;
 import com.finalproject.queerCalc.R;
 
 import androidx.databinding.DataBindingUtil;
-import androidx.navigation.Navigation;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
 import com.finalproject.queerCalc.SecondActivity;
 import com.finalproject.queerCalc.databinding.MainFragmentBinding;
-import com.google.android.material.button.MaterialButton;
 
 import static com.finalproject.queerCalc.BR.myViewModel;
 
-import org.mozilla.javascript.Context;
-
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Objects;
+import java.util.concurrent.Executor;
 
 
 public class MainFragment extends Fragment {
@@ -67,6 +70,7 @@ public class MainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         getView().findViewById(R.id.btn_divide).setOnLongClickListener(new View.OnLongClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public boolean onLongClick(View v) {
                 try {
@@ -83,9 +87,11 @@ public class MainFragment extends Fragment {
         binding.setVariable(myViewModel, mViewModel);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     public void instigateNavigation(View v) throws IOException, GeneralSecurityException {
         String equation = ((TextView) getView().findViewById(R.id.tv_equation)).getText().toString();
 
+        //Todo: make encrypted sharedPreferences a private method to simplify code
         KeyGenParameterSpec keyGenParameterSpec = MasterKeys.AES256_GCM_SPEC;
         String mainKeyAlias = MasterKeys.getOrCreate(keyGenParameterSpec);
 
@@ -98,18 +104,17 @@ public class MainFragment extends Fragment {
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         );
 
-        String favorite = sharedPreferences.getString("myFavorite","defValue");
-        Log.d(TAG, "instigateNavigation: checkingForFavorite | favorite= "+favorite);
-        if (equation.equals(favorite))
-            startActivityForResult((new Intent(getContext(), SecondActivity.class)), 1);
+        String favorite = sharedPreferences.getString("myFavorite", "defValue");
+        Log.d(TAG, "instigateNavigation: checkingForFavorite | favorite= " + favorite);
+        if (equation.equals(favorite)) {
+            authenticate();
+            //startActivityForResult((new Intent(getContext(), SecondActivity.class)), 1);
             //Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.action_mainFragment_to_secrets);
-
+        }
         else if (equation.equals("111")) {
             mViewModel.wantsResult.setValue(false);
             mViewModel.getResult();
-        }
-
-        else if (!mViewModel.wantsResult.getValue()){
+        } else if (!mViewModel.wantsResult.getValue()) {
             favoriteEquation();
             mViewModel.wantsResult.setValue(true);
         }
@@ -123,7 +128,6 @@ public class MainFragment extends Fragment {
             mViewModel.equation.setValue("15*40+");
         }
     }
-
 
     private void favoriteEquation() throws GeneralSecurityException, IOException {
         //sharedPrefs file name
@@ -143,11 +147,94 @@ public class MainFragment extends Fragment {
         );
 
         SharedPreferences.Editor sharedPrefsEditor = sharedPreferences.edit();
-        sharedPrefsEditor.putString("myFavorite",mViewModel.equation.getValue());
+        sharedPrefsEditor.putString("myFavorite", mViewModel.equation.getValue());
         sharedPrefsEditor.apply();
 
-        Log.d(TAG, "favoriteEquation: sharedPref="+sharedPreferences.getString("myFavorite","defValue"));
-        Toast.makeText(getContext(), "yay! I ran!", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "favoriteEquation: sharedPref=" + sharedPreferences.getString("myFavorite", "defValue"));
+    }
+
+    //Biometrics
+    private Executor executor;
+    private BiometricPrompt biometricPrompt;
+    private BiometricPrompt.PromptInfo promptInfo;
+
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    private boolean authenticate() {
+        boolean hasAccess = false;
+
+        executor = ContextCompat.getMainExecutor(getActivity().getApplicationContext());
+        KeyguardManager keyguardManager = (KeyguardManager) getContext().getSystemService(KEYGUARD_SERVICE);
+        keyguardManager.isDeviceSecure();
+
+        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Biometric login for my app")
+                .setSubtitle("Log in using your biometric credential")
+                //.setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+                .setNegativeButtonText("negative stuff")
+                .setConfirmationRequired(true)
+                .build();
+
+        /*BiometricManager biometricManager = BiometricManager.from(getActivity().getApplicationContext());
+        switch (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL)){
+            case BiometricManager.BIOMETRIC_SUCCESS:
+                Log.d("MY_APP_TAG", "App can authenticate using biometrics.");
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                Log.e("MY_APP_TAG", "No biometric features available on this device.");
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+                Log.e("MY_APP_TAG", "Biometric features are currently unavailable.");
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                // Prompts the user to create credentials that your app accepts.
+                final Intent enrollIntent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
+                enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                        BIOMETRIC_STRONG | DEVICE_CREDENTIAL);
+                Log.d(TAG, "doBiometrics: BIOMETRIC_ERROR_NONE_ENROLLED");
+                //startActivityForResult(enrollIntent, REQUEST_CODE);
+                break;
+        }*/
+
+        biometricPrompt = new BiometricPrompt(MainFragment.this,
+                executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Toast.makeText(getActivity().getApplicationContext(),
+                        "Authentication error: " + errString, Toast.LENGTH_SHORT)
+                        .show();
+
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Toast.makeText(getActivity().getApplicationContext(),
+                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
+                startActivityForResult((new Intent(getContext(), SecondActivity.class)), 1);
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(getActivity().getApplicationContext(), "Authentication failed",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
+        if (keyguardManager.isDeviceSecure()) {
+            biometricPrompt.authenticate(promptInfo);
+            Log.d(TAG, "doBiometrics: device is Secure method");
+        }
+
+        return hasAccess;
+    }
+
+
+    private void generateSecretKey(KeyGenParameterSpec keyGenParameterSpec) {
+
     }
 
 }
