@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<item
-    android:id="@+id/toTableOfContents"
-    android:icon="@drawable/ic_baseline_view_headline_24"
-    android:title="table of contents"
-    app:showAsAction="always"/>
+    <item
+        android:id="@+id/toTableOfContents"
+        android:icon="@drawable/ic_baseline_view_headline_24"
+        android:iconTint="@color/white_lettering"
+        android:title="table of contents"
+        app:showAsAction="always" />
 
-    <item android:id="@+id/previousChapter"
+    <item
+        android:id="@+id/previousChapter"
         android:icon="@drawable/ic_baseline_arrow_left_24"
+        android:iconTint="@color/white_lettering"
         android:title="previous"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
-    <item android:id="@+id/nextChapter"
+    <item
+        android:id="@+id/nextChapter"
         android:icon="@drawable/ic_baseline_arrow_right_24"
+        android:iconTint="@color/white_lettering"
         android:title="next"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 </menu>

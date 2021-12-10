@@ -12,7 +12,9 @@
         Status bar color.
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         Customize your theme here. -->
-        <item name="android:windowBackground">#17191A</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/black_background</item>
+        <item name="colorPrimary">@color/black_background</item>
+        <item name="colorPrimaryVariant">@color/blue_equal_button</item>
     </style>
 
     <style name="Theme.QueerCalc.NoActionBar">
@@ -20,7 +22,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.QueerCalc.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="ToolBarStyle" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+    </style>
 
-    <style name="Theme.QueerCalc.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

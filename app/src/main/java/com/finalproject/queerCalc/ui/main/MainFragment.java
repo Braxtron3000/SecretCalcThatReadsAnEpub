@@ -111,7 +111,7 @@ public class MainFragment extends Fragment {
             //startActivityForResult((new Intent(getContext(), SecondActivity.class)), 1);
             //Navigation.findNavController(getActivity().findViewById(R.id.nav_host)).navigate(R.id.action_mainFragment_to_secrets);
         }
-        else if (equation.equals("111")) {
+        else if (equation.equals("1.7.13")) {
             mViewModel.wantsResult.setValue(false);
             mViewModel.getResult();
         } else if (!mViewModel.wantsResult.getValue()) {
@@ -171,7 +171,7 @@ public class MainFragment extends Fragment {
                 .setTitle("Biometric login for my app")
                 .setSubtitle("Log in using your biometric credential")
                 //.setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL)
-                .setNegativeButtonText("negative stuff")
+                .setNegativeButtonText("cancel")
                 .setConfirmationRequired(true)
                 .build();
 
@@ -201,26 +201,17 @@ public class MainFragment extends Fragment {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                Toast.makeText(getActivity().getApplicationContext(),
-                        "Authentication error: " + errString, Toast.LENGTH_SHORT)
-                        .show();
-
             }
 
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                Toast.makeText(getActivity().getApplicationContext(),
-                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
                 startActivityForResult((new Intent(getContext(), SecondActivity.class)), 1);
             }
 
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-                Toast.makeText(getActivity().getApplicationContext(), "Authentication failed",
-                        Toast.LENGTH_SHORT)
-                        .show();
             }
         });
 
