@@ -160,9 +160,7 @@ public class MainFragment extends Fragment {
 
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    private boolean authenticate() {
-        boolean hasAccess = false;
-
+    private void authenticate() {
         executor = ContextCompat.getMainExecutor(getActivity().getApplicationContext());
         KeyguardManager keyguardManager = (KeyguardManager) getContext().getSystemService(KEYGUARD_SERVICE);
         keyguardManager.isDeviceSecure();
@@ -174,27 +172,6 @@ public class MainFragment extends Fragment {
                 .setNegativeButtonText("cancel")
                 .setConfirmationRequired(true)
                 .build();
-
-        /*BiometricManager biometricManager = BiometricManager.from(getActivity().getApplicationContext());
-        switch (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.DEVICE_CREDENTIAL)){
-            case BiometricManager.BIOMETRIC_SUCCESS:
-                Log.d("MY_APP_TAG", "App can authenticate using biometrics.");
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                Log.e("MY_APP_TAG", "No biometric features available on this device.");
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                Log.e("MY_APP_TAG", "Biometric features are currently unavailable.");
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                // Prompts the user to create credentials that your app accepts.
-                final Intent enrollIntent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
-                enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                        BIOMETRIC_STRONG | DEVICE_CREDENTIAL);
-                Log.d(TAG, "doBiometrics: BIOMETRIC_ERROR_NONE_ENROLLED");
-                //startActivityForResult(enrollIntent, REQUEST_CODE);
-                break;
-        }*/
 
         biometricPrompt = new BiometricPrompt(MainFragment.this,
                 executor, new BiometricPrompt.AuthenticationCallback() {
@@ -219,13 +196,9 @@ public class MainFragment extends Fragment {
             biometricPrompt.authenticate(promptInfo);
             Log.d(TAG, "doBiometrics: device is Secure method");
         }
-
-        return hasAccess;
     }
 
 
-    private void generateSecretKey(KeyGenParameterSpec keyGenParameterSpec) {
 
-    }
 
 }

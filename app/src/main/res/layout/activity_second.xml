@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/epubnavigation"
-        app:title="not the bible" />
+        app:title="ebook reader"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
